@@ -1,0 +1,32 @@
+<template>
+  <div>
+    <el-container>
+  <el-aside width="200px"><common-aside></common-aside></el-aside>
+  <el-container>
+    <el-header>
+      <common-header></common-header>
+    </el-header>
+    <el-main><router-view></router-view></el-main>
+  </el-container>
+</el-container>
+    
+  </div>
+</template>
+
+<script>
+import CommonAside from '../CommonAside.vue';
+import CommonHeader from '../CommonHeader.vue'
+export default {
+  name:'MyMain',
+  components:{
+    CommonAside,
+    CommonHeader
+
+  }
+
+}
+</script>
+
+<style>
+
+</style>
