@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-  <el-aside width="200px"><common-aside></common-aside></el-aside>
+  <el-aside width="auto "><common-aside></common-aside></el-aside>
   <el-container>
     <el-header>
       <common-header></common-header>
@@ -27,6 +27,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.el-header {
+  padding: 0;
+}
+.el-card__body {
+    padding: 5px 0px ;
+}
 </style>

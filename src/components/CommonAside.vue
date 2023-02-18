@@ -10,7 +10,7 @@
       active-text-color="#ffd04b"
       :collapse="isCollapse"
     >
-    <h3>通用后台管理系统</h3>
+    <h3>{{isCollapse ? '后台' :'通用后台管理系统'}}</h3>
       <el-menu-item v-for="item in noChildren" :key="item.name" :index="item.name">
         <i :class="`el-icon-${item.icon}`"></i>
         <span slot="title" @click="menuClick(item)">{{ item.label }}</span>
@@ -31,8 +31,7 @@
 <script>
 export default {
   data() {
-    return {
-      isCollapse: false,
+    return {      
       MenuData: [
         {
           path: '/',
@@ -102,6 +101,9 @@ export default {
     hasChildren() {
       return this.MenuData.filter(item => item.children)
     },
+    isCollapse() {
+      return this.$store.state.tab.isCollapse
+    }
     
   }
 }
@@ -117,6 +119,7 @@ export default {
 }
 .el-menu {
     height: 100vh;
+    border-right:0;
     h3 {
     color:#fff;
     font-weight: 400;
