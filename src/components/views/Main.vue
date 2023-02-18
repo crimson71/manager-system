@@ -31,7 +31,5 @@ export default {
 .el-header {
   padding: 0;
 }
-.el-card__body {
-    padding: 5px 0px ;
-}
+
 </style>

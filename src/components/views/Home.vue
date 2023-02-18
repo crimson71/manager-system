@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <!-- home左侧区域 -->
-    <el-col :span="8" >
+    <el-col :span="8" style="padding-right: 10px">
       <!-- 用户信息卡片 -->
       <el-card class="box-card">
         <div class="user">
@@ -31,63 +31,52 @@
     </el-col>
 
     <!-- home右侧区域 -->
-    <el-col :span="16">
-      <div class="num" >
-        <el-card :body-style="{ display: 'flex' }" v-for="item in countData" :key="item.name">
-          <i :class="`el-icon-${item.icon}`" :style="{background:item.color}"></i>
+    <el-col :span="16" style="padding-left: 10px">
+      <!-- 销量情卡片 -->
+      <div class="num">
+        <el-card
+          :body-style="{ display: 'flex' }"
+          v-for="item in countData"
+          :key="item.name"
+        >
+          <i
+            :class="`el-icon-${item.icon}`"
+            :style="{ background: item.color }"
+          ></i>
           <div class="detail">
             <p class="desc">{{ item.name }}</p>
-          <p class="price">{{ '￥'+item.value }}</p>
+            <p class="price">{{ '￥' + item.value }}</p>
           </div>
         </el-card>
+      </div>
+      <!-- 销量拆线图 -->
+      <el-card style="height: 280px">
+        <div ref="echarts1" style="height: 280px"></div>
+      </el-card>
+      <div class="graph">
+        <!-- 柱状图 -->
+        <el-card style="height: 260px">
+          <div ref="echarts2" style="height: 260px"></div>
+        </el-card>
+        <!-- 饼状图 -->
+        <el-card style="height: 260px"> 
+        <div ref="echarts3" style="height: 260px">
+
+        </div>
+      </el-card>
       </div>
     </el-col>
   </el-row>
 </template>
 
 <script>
+import { getData } from '../../api/index.js'
+import * as echarts from 'echarts'
 export default {
   name: 'MyHome',
   data() {
     return {
-      tableData: [
-        {
-          name: 'oppo',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: 'vivo',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '苹果',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '小米',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '三星',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        },
-        {
-          name: '魅族',
-          todayBuy: 100,
-          monthBuy: 300,
-          totalBuy: 800
-        }
-      ],
+      tableData: [],
       tableLabel: {
         name: '品牌',
         todayBuy: '日销量',
@@ -133,6 +122,108 @@ export default {
         }
       ]
     }
+  },
+  mounted() {
+    getData().then((data) => {
+      // console.log(data.data);
+      const { tableData } = data.data
+      this.tableData = tableData
+
+      const { orderData, userData,videoData } = data.data
+
+      console.log(videoData)
+      // 拆线图的实现
+      const echart1 = echarts.init(this.$refs.echarts1)
+      let echart1Option = {}
+
+      const xAxis = Object.keys(orderData.data[0])
+      const xAxisData = {
+        data: xAxis
+      }
+      echart1Option.xAxis = xAxisData
+      echart1Option.legend = xAxisData
+      echart1Option.yAxis = {}
+
+      echart1Option.series = []
+      xAxis.forEach((key) => {
+        echart1Option.series.push({
+          name: key,
+          data: orderData.data.map((item) => item[key]),
+          type: 'line'
+        })
+      })
+      echart1.setOption(echart1Option)
+
+      // 柱状图的实现
+      const echarts2 = echarts.init(this.$refs.echarts2)
+      let echarts2Option = {
+        legend: {
+          // 图例文字颜色
+          textStyle: {
+            color: '#333'
+          }
+        },
+        grid: {
+          left: '20%'
+        },
+        // 提示框
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category', // 类目轴
+          data: userData.map((item) => item.date),
+          axisLine: {
+            lineStyle: {
+              color: '#17b3a3'
+            }
+          },
+          axisLabel: {
+            interval: 0,
+            color: '#333'
+          }
+        },
+        yAxis: [
+          {
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                color: '#17b3a3'
+              }
+            }
+          }
+        ],
+        color: ['#2ec7c9', '#b6a2de'],
+        series: [
+          {
+            name: '新增用户',
+            data: userData.map((item) => item.new),
+            type:'bar'
+
+          },
+          {
+            name: '活跃用户',
+            data: userData.map((item) => item.active),
+            type:'bar'
+          }
+        ]
+      }
+      echarts2.setOption(echarts2Option)
+
+      // 饼 状图 的实现
+      const echarts3 = echarts.init(this.$refs.echarts3)
+      let echarts3Option ={
+        series: [
+    {
+      type: 'pie',
+      data: videoData
+      
+    }
+  ]
+      }
+
+      echarts3.setOption(echarts3Option)
+    })
   }
 }
 </script>
@@ -140,7 +231,6 @@ export default {
 <style lang="less" scoped>
 /deep/.el-card__body {
   padding: 0px 10px;
- 
 }
 
 .user {
@@ -182,8 +272,8 @@ export default {
 .num {
   display: flex;
   flex-wrap: wrap;
-  justify-content:space-between ;
- 
+  justify-content: space-between;
+
   i {
     width: 80px;
     height: 80px;
@@ -192,17 +282,14 @@ export default {
     line-height: 80px;
     text-align: center;
   }
-  .detail{
-   
+  .detail {
     display: flex;
     margin-left: 15px;
     flex-direction: column;
     justify-content: center;
-    
-    .price{
-      font-size: 26px;
-      
 
+    .price {
+      font-size: 26px;
     }
     .desc {
       margin-top: 20px;
@@ -211,9 +298,16 @@ export default {
     }
   }
   .el-card {
-    width: 32%;    
+    width: 32%;
     margin-bottom: 20px;
-    
+  }
+}
+.graph {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  .el-card {
+    width: 48%;
   }
 }
 </style>
