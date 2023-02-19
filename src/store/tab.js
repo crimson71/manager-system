@@ -30,7 +30,10 @@ export default {
         }
       }
       
-
+    },
+    closeTag(state,item) {
+      const index = state.tabList.findIndex(val => val.name === item.name)
+      state.tabList.splice(index,1)
     }
 
   }
