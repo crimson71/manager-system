@@ -131,7 +131,7 @@ export default {
 
       const { orderData, userData,videoData } = data.data
 
-      console.log(videoData)
+      // console.log(videoData)
       // 拆线图的实现
       const echart1 = echarts.init(this.$refs.echarts1)
       let echart1Option = {}

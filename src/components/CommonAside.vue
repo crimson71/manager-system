@@ -90,6 +90,8 @@ export default {
       if(this.$route.path !== item.path && !(item.path === '/' & (item.path === '/home') )) {
         this.$router.push(item.path)
       }
+      // 调用this.$store.commit向store传输数据，有两个参数，第一个是mutations对应的方法，第二个是要传输的数据
+      this.$store.commit('selectMenu',item)
       
     }
   },
