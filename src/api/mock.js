@@ -14,4 +14,4 @@ Mock.mock('/api/user/delete','post',UserApi.deleteUser)
 // 编辑用户
 Mock.mock('/api/user/edit','post',UserApi.updateUser)
 // 获取整张用户列表
-Mock.mock('/api/user/getuser',UserApi.getUserList)
+Mock.mock(/\/api\/user\/getuser/,UserApi.getUserList)
