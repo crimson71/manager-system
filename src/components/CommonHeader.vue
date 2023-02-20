@@ -43,7 +43,7 @@ export default {
     },
     handleCommand(command) {
       if (command === 'logout') {
-       
+        Cookie.remove('menu')
         Cookie.remove('token')
         this.$router.push({name:'login'})
       }

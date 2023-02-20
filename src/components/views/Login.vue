@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import Mock from 'mockjs'
+// import Mock from 'mockjs'
 import Cookies from 'js-cookie'
 import {getMenu} from '@/api/index.js'
 export default {
@@ -62,6 +62,9 @@ export default {
             const token = data.data.token
           Cookies.set('token',token)
           this.$router.push({name:'home'})
+          this.$store.commit('setMenu',data.data.menu) 
+          this.$store.commit('addMenu',this.$router)
+
 
           }else {
             this.$message.error(`错了哦，${data.data.message}哦`);
