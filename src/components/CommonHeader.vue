@@ -5,7 +5,7 @@
         icon="el-icon-menu"
         size="mini"
         @click="handlerMenu"
-        style="margin-right: 20px;"
+        style="margin-right: 20px"
       ></el-button>
 
       <!-- 面包屑区域 -->
@@ -20,13 +20,13 @@
       </el-breadcrumb>
     </div>
     <div class="r-content">
-      <el-dropdown>
+      <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
           <img class="user" src="../assets/images/avatar.jpg" alt="" />
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -35,10 +35,18 @@
 
 <script>
 import { mapState } from 'vuex'
+import Cookie from 'js-cookie'
 export default {
   methods: {
     handlerMenu() {
       this.$store.commit('collapseMenu')
+    },
+    handleCommand(command) {
+      if (command === 'logout') {
+       
+        Cookie.remove('token')
+        this.$router.push({name:'login'})
+      }
     }
   },
   computed: {
@@ -81,16 +89,14 @@ export default {
       .el-breadcrumb__inner {
         font-weight: normal;
         &.is-link {
-          color: #666 ;
+          color: #666;
         }
-        
       }
       &:last-child {
-          .el-breadcrumb__inner {
-            color:#fff;
-          }
-
+        .el-breadcrumb__inner {
+          color: #fff;
         }
+      }
     }
   }
 }

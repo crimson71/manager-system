@@ -7,6 +7,7 @@ import User from '@/components/views/User.vue'
 import Mall from '@/components/views/Mall.vue'
 import PageOne from '@/components/views/PageOne.vue'
 import PageTwo from '@/components/views/PageTwo.vue'
+import Login from '@/components/views/Login.vue'
 
 const routes = [
   {path:'/',
@@ -20,6 +21,7 @@ const routes = [
     { path: 'page2',name:'page2',  component: PageTwo },
 
   ]},
+  {path:'/login',name:'login',component:Login}
  
 ]
 
